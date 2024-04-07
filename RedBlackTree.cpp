@@ -249,6 +249,22 @@ string RedBlackTree :: ToInfixString(RBTNode* node) const{
     return left + root + right; 
 }
 
+string RedBlackTree::ToPostfixString() const {
+    return ToPostfixString(root);
+}
+
+string RedBlackTree::ToPostfixString(RBTNode* node) const {
+    if (node == nullptr) {
+        return "";
+    }
+    
+    string left = ToPostfixString(node->left);
+    string right = ToPostfixString(node->right);
+    string root = to_string(node->data) + (node->color == 1 ? "B" : "R") + " ";
+    
+    return left + right + root;
+}
+
 void RedBlackTree::DeleteTree(RBTNode* node) {
     if (node != nullptr) {
         DeleteTree(node->left); 
