@@ -101,24 +101,30 @@ bool RedBlackTree:: RBTreeSetChild(RBTNode* parent, RBTNode* whichChild, RBTNode
 
 //https://learn.zybooks.com/zybook/FANDMCPS222NovakSpring2024/chapter/16/section/2?content_resource_id=61871801
 //16.2.2
-bool RedBlackTree ::  RBTreeReplaceChild(RBTNode* parent,RBTNode* currentChild, RBTNode* newChild){
+void RedBlackTree ::  RBTreeReplaceChild(RBTNode* parent,RBTNode* currentChild, RBTNode* newChild){
     if(parent->left == currentChild){// is a child of parent it updates the pointers 
         RBTreeSetChild(parent,parent->left,newChild );
     }
     if(parent->right == currentChild){
         RBTreeSetChild(parent,parent->right,newChild);
     }
-    return false;
+    // return false;
 }
 
 //16.2.4 zybook
 void RedBlackTree::  RBTreeRotateRight(RBTNode*  node){
+    if (node == nullptr || node->left == nullptr) { // if rotation is possible 
+        return; 
+    }
+
     RBTNode* leftRightChild = node->left->right;
     if(node->parent != nullptr){// node isnt root
         RBTreeReplaceChild(node->parent,node,node->left);
     }else{
         root = node->left; // if node is root
-        root->parent = nullptr; 
+        if (root != nullptr) {
+            root->parent = nullptr;
+        }
     }
     RBTreeSetChild(node->left,node->right,node);
     RBTreeSetChild(node,node->left,leftRightChild);
@@ -127,12 +133,18 @@ void RedBlackTree::  RBTreeRotateRight(RBTNode*  node){
 
 ///16.2.3 zybook 
 void RedBlackTree:: RBTreeRotateLeft(RBTNode* node){
+    if (node == nullptr || node->right == nullptr) { // if rotation is possible 
+        return; 
+    }
+
     RBTNode* rightLeftChild = node->right->left;
     if(node->parent != nullptr){ // if node isnt a root
         RBTreeReplaceChild(node->parent, node ,node->right);
     }else{ // if node is root
         root= node->right; 
-        root->parent = nullptr; 
+        if (root != nullptr) {
+            root->parent = nullptr; 
+        }
     }
     RBTreeSetChild(node->right,node->left, node);
     RBTreeSetChild(node, node->right, rightLeftChild);
@@ -182,11 +194,13 @@ void RedBlackTree:: RBTreeBalance(RBTNode* node){
     }
     if(node == parent->right && parent == grandparent->left){
         RBTreeRotateLeft(parent);
+        // node = parent->left;
         node = parent;
         parent = node->parent;
     }
     else if (node == parent->right && parent == grandparent->right){
         RBTreeRotateRight(parent); 
+        // node = parent->right;
         node = parent; 
         parent = node->parent; 
     }

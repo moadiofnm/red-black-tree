@@ -19,7 +19,7 @@ struct RBTNode{
     RBTNode *left = nullptr; 
     RBTNode *right = nullptr;
     RBTNode *parent = nullptr; 
-    RBTNode(int data): data(data), left(nullptr),right(nullptr), color(COLOR_RED){} // RBT constructor 
+    RBTNode(int data): data(data), color(COLOR_RED), left(nullptr), right(nullptr) {} // RBT constructor 
 };
 
 
@@ -29,7 +29,7 @@ RBTNode* BSTInsert(int value); //BST insert
 void Insert(int value); //rbt insert
 void RBTreeBalance(RBTNode* node);
 bool RBTreeSetChild(RBTNode* parent, RBTNode* whichChild, RBTNode* child); // left or right child of parent and sets it 
-bool RBTreeReplaceChild(RBTNode* parent,RBTNode* currentChild, RBTNode* newChild);//replaces a node's left or right child pointer with a new value.
+void RBTreeReplaceChild(RBTNode* parent,RBTNode* currentChild, RBTNode* newChild);//replaces a node's left or right child pointer with a new value.
 void RBTreeRotateLeft(RBTNode* node);
 void RBTreeRotateRight(RBTNode*  node);
 RBTNode* GetRBTGrandparentNode(RBTNode* node);
