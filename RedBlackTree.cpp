@@ -32,7 +32,7 @@ RedBlackTree :: RBTNode* RedBlackTree::BSTInsert (int value){ // regular bst ins
     return newNode;
 }
 
-bool RedBlackTree ::contains(int value){
+bool RedBlackTree ::Contains(int value){
     RBTNode* curr = root; 
     while(curr != nullptr){
         if (value == curr->data){ // value is found 

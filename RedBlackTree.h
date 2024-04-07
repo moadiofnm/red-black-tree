@@ -36,7 +36,7 @@ RBTNode* GetRBTGrandparentNode(RBTNode* node);
 RBTNode* GetUncleNode(RBTNode* node);
 void DeleteTree(RBTNode* node);
 
-bool contains(int value); 
+bool Contains(int value); 
 int getMin();
 int getMax(); 
 
