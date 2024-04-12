@@ -28,17 +28,17 @@ struct RBTNode{
 RBTNode* BSTInsert(int value); //BST insert
 void Insert(int value); //rbt insert
 void RBTreeBalance(RBTNode* node);
-bool RBTreeSetChild(RBTNode* parent, RBTNode* whichChild, RBTNode* child); // left or right child of parent and sets it 
+bool RBTreeSetChild(RBTNode* parent, string whichChild, RBTNode* child); // left or right child of parent and sets it 
 void RBTreeReplaceChild(RBTNode* parent,RBTNode* currentChild, RBTNode* newChild);//replaces a node's left or right child pointer with a new value.
 void RBTreeRotateLeft(RBTNode* node);
 void RBTreeRotateRight(RBTNode*  node);
 RBTNode* GetRBTGrandparentNode(RBTNode* node);
 RBTNode* GetUncleNode(RBTNode* node);
 void DeleteTree(RBTNode* node);
-
+void Fixup(RBTNode* node);
 bool Contains(int value); 
-int getMin();
-int getMax(); 
+int GetMin();
+int GetMax(); 
 
 int Size(){
     return numItems; 

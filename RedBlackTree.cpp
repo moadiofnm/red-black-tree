@@ -28,6 +28,8 @@ RedBlackTree :: RBTNode* RedBlackTree::BSTInsert (int value){ // regular bst ins
     }else{
         parent->right = newNode;
     }          
+    newNode->color = 0;// set new node to red
+    Fixup(newNode);
     numItems++;
     return newNode;
 }
@@ -50,31 +52,33 @@ bool RedBlackTree ::Contains(int value){
 }
 
 
-int RedBlackTree :: getMin() {
+
+
+int RedBlackTree :: GetMin() {
 
     RBTNode* curr = root; 
-    RBTNode* next = curr->left;
+    // RBTNode* next = curr->left;
 
     if(root == nullptr){
         throw runtime_error("tree is empty");
 
     }
-    while(next != nullptr){
+    while(curr->left != nullptr){
         curr = curr->left; // keep going left
     }
     return curr->data; 
 }
 
-int RedBlackTree :: getMax() {
+int RedBlackTree :: GetMax() {
 
     RBTNode* curr = root; 
-    RBTNode* next = curr->right;
+    // RBTNode* next = curr->right;
 
     if(root == nullptr){
         throw runtime_error("tree is empty");
 
     }
-    while(next != nullptr){
+    while(curr->right != nullptr){
         curr = curr->right; // keep going right 
     }
     return curr->data; 
@@ -82,11 +86,11 @@ int RedBlackTree :: getMax() {
 
 //https://learn.zybooks.com/zybook/FANDMCPS222NovakSpring2024/chapter/16/section/2?content_resource_id=61871801
 //16.2.1
-bool RedBlackTree:: RBTreeSetChild(RBTNode* parent, RBTNode* whichChild, RBTNode* child){
-    if (whichChild != parent->left && whichChild != parent->right){ // if whichchild is neither the left ot right child of the parent return false
+bool RedBlackTree:: RBTreeSetChild(RBTNode* parent, string whichChild, RBTNode* child){
+    if (whichChild != "left" && whichChild != "right"){ // if whichchild is neither the left ot right child of the parent return false
         return false;
     }
-    if(whichChild == parent->left){ //if node is equal to the parent left set child 
+    if(whichChild == "left"){ //if node is equal to the parent left set child 
         parent->left = child;
     }else{ // else set right to child 
         parent->right = child; 
@@ -103,18 +107,18 @@ bool RedBlackTree:: RBTreeSetChild(RBTNode* parent, RBTNode* whichChild, RBTNode
 //16.2.2
 void RedBlackTree ::  RBTreeReplaceChild(RBTNode* parent,RBTNode* currentChild, RBTNode* newChild){
     if(parent->left == currentChild){// is a child of parent it updates the pointers 
-        RBTreeSetChild(parent,parent->left,newChild );
+        RBTreeSetChild(parent,"left",newChild );
     }
     if(parent->right == currentChild){
-        RBTreeSetChild(parent,parent->right,newChild);
+        RBTreeSetChild(parent,"right",newChild);
     }
     // return false;
 }
 
 //16.2.4 zybook
-void RedBlackTree::  RBTreeRotateRight(RBTNode*  node){
+void RedBlackTree:: RBTreeRotateRight(RBTNode*  node){
     if (node == nullptr || node->left == nullptr) { // if rotation is possible 
-        return; 
+        throw logic_error("trying to right rotate there is no left child"); 
     }
 
     RBTNode* leftRightChild = node->left->right;
@@ -126,15 +130,15 @@ void RedBlackTree::  RBTreeRotateRight(RBTNode*  node){
             root->parent = nullptr;
         }
     }
-    RBTreeSetChild(node->left,node->right,node);
-    RBTreeSetChild(node,node->left,leftRightChild);
+    RBTreeSetChild(node->left,"right",node);
+    RBTreeSetChild(node,"left",leftRightChild);
 
 }
 
 ///16.2.3 zybook 
 void RedBlackTree:: RBTreeRotateLeft(RBTNode* node){
     if (node == nullptr || node->right == nullptr) { // if rotation is possible 
-        return; 
+        throw  logic_error("trying to left rotate there is no right child"); 
     }
 
     RBTNode* rightLeftChild = node->right->left;
@@ -146,8 +150,8 @@ void RedBlackTree:: RBTreeRotateLeft(RBTNode* node){
             root->parent = nullptr; 
         }
     }
-    RBTreeSetChild(node->right,node->left, node);
-    RBTreeSetChild(node, node->right, rightLeftChild);
+    RBTreeSetChild(node->right,"left", node);
+    RBTreeSetChild(node, "right", rightLeftChild);
 }
 
 RedBlackTree:: RBTNode* RedBlackTree:: GetRBTGrandparentNode(RBTNode* node){
@@ -213,10 +217,57 @@ void RedBlackTree:: RBTreeBalance(RBTNode* node){
     }
 
 }
+
+void RedBlackTree :: Fixup(RBTNode* node){
+    while(node!=root && node->parent->color == 0){ // if parent is red
+        RBTNode* grandparent = GetRBTGrandparentNode(node);
+        if (grandparent == nullptr) break; // if it doesnt exist 
+        if(node->parent == grandparent->left){
+            RBTNode* unc = GetUncleNode(node); 
+            //recolor the nodes since all node added will be red 
+            if(unc!= nullptr && unc->color == 0){ // if unc is red
+                unc->color = 1; // change to black
+                node->parent->color = 1; // parent should be black
+                grandparent->color = 0; // to red
+                node = grandparent; 
+            }else{// if its black
+                if(node == node->parent->right){
+                    node = node->parent;
+                    RBTreeRotateLeft(node);
+                }
+                node->parent->color = 1;
+                grandparent->color = 0;// grandparent is red
+                RBTreeRotateRight(grandparent); // rotate grandparent
+            }
+
+        }else{
+            RBTNode* uncle = GetUncleNode(node);
+            if(uncle!= nullptr && uncle->color == 0){
+                uncle->color = 1; 
+                node->parent->color = 1; 
+                grandparent->color = 0;
+                node = grandparent;  // 
+            }else{
+                if(node == node->parent->left){
+                    node = node->parent;
+                    RBTreeRotateRight(node);
+                }
+                node->parent->color = 1;
+                grandparent->color = 0;
+                RBTreeRotateLeft(grandparent);
+            }
+        }
+    }
+    root->color = 1;// make sure root is black
+}
+
 // 16.3.1 zybook
 void RedBlackTree :: Insert(int value){ // rbt insert
+     if (this->Contains(value)) {
+        throw invalid_argument("Value already exists");
+    }
     RBTNode* newNode = BSTInsert(value); 
-    newNode->color = 0; // color is red
+    // newNode->color = 0; // color is red
     RBTreeBalance(newNode);
 }
 
@@ -239,6 +290,8 @@ string RedBlackTree::ToPrefixString(RBTNode* node) const {
     string right = ToPrefixString(node->right);
     return root + left + right;
 }
+
+
 string RedBlackTree :: ToInfixString(RBTNode* node) const{
     if(node == nullptr){
         return "";
@@ -260,7 +313,7 @@ string RedBlackTree::ToPostfixString(RBTNode* node) const {
     
     string left = ToPostfixString(node->left);
     string right = ToPostfixString(node->right);
-    string root = to_string(node->data) + (node->color == 1 ? "B" : "R") + " ";
+    string root = (node->color == 1 ? " B" : " R") + to_string(node->data) + " ";
     
     return left + right + root;
 }
