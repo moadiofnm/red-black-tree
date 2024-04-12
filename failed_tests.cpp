@@ -11,7 +11,7 @@ void TestInsertThirdNode() {
   rbt->Insert(30);
   rbt->Insert(15);
   rbt->Insert(10); // Left Left
-  // cout << "rbt: "  << rbt->ToPrefixString() << endl;
+  cout << "rbt: "  << rbt->ToPrefixString() << endl;
   assert(rbt->ToPrefixString() == " B15  R10  R30 ");
   delete rbt;
 
@@ -19,6 +19,7 @@ void TestInsertThirdNode() {
   rbt->Insert(30);
   rbt->Insert(15);
   rbt->Insert(25); // Right Left
+  cout << "rbt: "  << rbt->ToPrefixString() << endl;
   assert(rbt->ToPrefixString() == " B25  R15  R30 ");
   delete rbt;
 
@@ -26,15 +27,17 @@ void TestInsertThirdNode() {
   rbt->Insert(30);
   rbt->Insert(15);
   rbt->Insert(45); // Easy case
+  cout << "rbt: "  << rbt->ToPrefixString() << endl;
   assert(rbt->ToPrefixString() == " B30  R15  R45 ");
   delete rbt;
 
   // symmetry!
-
+  cout << "symmtry"<< endl; 
   rbt = new RedBlackTree();
   rbt->Insert(30);
   rbt->Insert(45);
   rbt->Insert(15); // Easy case
+  cout << "rbt: "  << rbt->ToPrefixString() << endl;
   assert(rbt->ToPrefixString() == " B30  R15  R45 ");
   delete rbt;
 
@@ -42,6 +45,7 @@ void TestInsertThirdNode() {
   rbt->Insert(30);
   rbt->Insert(45);
   rbt->Insert(35); // Left Right
+  // cout << "rbt: "  << rbt->ToPrefixString() << endl;
   assert(rbt->ToPrefixString() == " B35  R30  R45 ");
   delete rbt;
 
@@ -49,6 +53,7 @@ void TestInsertThirdNode() {
   rbt->Insert(30);
   rbt->Insert(45);
   rbt->Insert(55); // Right Right
+  // cout << "rbt: "  << rbt->ToPrefixString() << endl;
   assert(rbt->ToPrefixString() == " B45  R30  R55 ");
   delete rbt;
 
@@ -63,7 +68,7 @@ void TestInsertFifthNode() {
   rbt->Insert(45);
   rbt->Insert(10);
   rbt->Insert(25);
-  // cout << "result: "  << rbt->ToPrefixString() << endl;
+  cout << "result: "  << rbt->ToPrefixString() << endl;
   assert(rbt->ToPrefixString() == " B30  B15  R10  R25  B45 ");
   delete rbt;
 
@@ -107,6 +112,7 @@ void TestInsertFifthNode() {
   rbt->Insert(45);
   rbt->Insert(10);
   rbt->Insert(12);
+  // cout<<"rbt: " << rbt->ToPrefixString();
   assert(rbt->ToPrefixString() == " B30  B12  R10  R15  B45 ");
   delete rbt;
 
@@ -148,7 +154,7 @@ void TestInsertDuplicates() {
 }
 
 
-void TestToStrings() {
+void TestToStrings2() {
   cout << "Testing ToString Methods..." << endl;
 
   RedBlackTree rbt = RedBlackTree();
@@ -158,6 +164,9 @@ void TestToStrings() {
   rbt.Insert(5);
   rbt.Insert(13);
   rbt.Insert(7);
+  cout <<  "pre: " << rbt.ToPrefixString()<<endl;
+  cout <<  "inf: "<< rbt.ToInfixString()<<endl; 
+  cout << "post: " << rbt.ToPostfixString()<< endl; 
 
   assert(rbt.ToPrefixString() == " B12  B7  R5  R11  B15  R13 ");
   assert(rbt.ToInfixString() == " R5  B7  R11  B12  R13  B15 ");
@@ -207,7 +216,7 @@ void TestToStrings() {
   rbt.Insert(5);
   rbt.Insert(13);
   rbt.Insert(7);
-
+  cout<< "rbt: " << rbt.ToPrefixString();
   assert(rbt.ToPrefixString() == " B12  B7  R5  R11  B15  R13 ");
   assert(rbt.ToInfixString() == " R5  B7  R11  B12  R13  B15 ");
   assert(rbt.ToPostfixString() == " R5  R11  B7  R13  B15  B12 ");
@@ -409,6 +418,7 @@ void TestGetMinimumMaximum() {
   rbt.Insert(23);
   rbt.Insert(85);
   rbt.Insert(61);
+  // cout << rbt.GetMax();
 
   assert(rbt.GetMin() == 20);
   assert(rbt.GetMax() == 85);
@@ -416,3 +426,14 @@ void TestGetMinimumMaximum() {
   cout << "PASSED!" << endl << endl;
 }
 
+int main(){
+  TestInsertThirdNode();//works
+  TestInsertFifthNode();//works 
+  TestGetMinimumMaximum();//works 
+  // TestCopyConstructor();
+TestInsertWithRecursiveFixUp(); // works 
+TestInsertDuplicates();// works
+TestToStrings2(); //works 
+TestToStrings();//works 
+TestInsertRandomTests();
+}
