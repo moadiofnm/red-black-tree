@@ -1,10 +1,9 @@
 all:
-	g++ -std=c++11 -Wall -g  RedBlackTreeTestsFirstStep.cpp RedBlackTree.cpp -o rbtTests
-	g++ -std=c++11 -Wall -g RedBlackTreeTests.cpp RedBlackTree.cpp -o rbtTests2
+	
+	g++ -std=c++11 -Wall -g RedBlackTree.cpp failed_tests.cpp -o rbtTests3
 
 run: 
+	./rbtTests3
 	
-	./rbtTests
-	./rbtTests2
 try: all run
 	
