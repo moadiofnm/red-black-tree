@@ -25,6 +25,10 @@ struct RBTNode{
 
 
 ~RedBlackTree();
+void Remove(int data);
+
+RBTNode* InOrdersuccessor(RBTNode* node);
+void transplant(RBTNode* a , RBTNode* b); 
 RBTNode* BSTInsert(int value); //BST insert
 void Insert(int value); //rbt insert
 void RBTreeBalance(RBTNode* node);
@@ -34,12 +38,11 @@ void RBTreeRotateLeft(RBTNode* node);
 void RBTreeRotateRight(RBTNode*  node);
 RBTNode* GetRBTGrandparentNode(RBTNode* node);
 RBTNode* GetUncleNode(RBTNode* node);
-void DeleteTree(RBTNode* node);
+void DeleteNode(RBTNode* node);
 void Fixup(RBTNode* node);
 bool Contains(int value); 
 int GetMin();
 int GetMax(); 
-
 int Size(){
     return numItems; 
 }

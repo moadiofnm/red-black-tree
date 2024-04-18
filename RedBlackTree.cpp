@@ -271,6 +271,57 @@ void RedBlackTree :: Insert(int value){ // rbt insert
     RBTreeBalance(newNode);
 }
 
+
+RedBlackTree:: RBTNode* RedBlackTree  ::  InOrdersuccessor(RBTNode* node){
+    if(node == nullptr){// check if node is nullptr
+        return nullptr; 
+    }
+    if(node->right!=nullptr){
+        RBTNode* curr = node;
+        curr = curr->right; // traverse right one time 
+        while(curr->left!= nullptr){
+            curr = curr->left; // then go all the way left 
+        }
+        return curr;
+    }   
+
+    //geeksforgeeks.org/inorder-successor--binary-search-tree/#
+    // used the part of this code for if the node does not have a right child.
+
+    RBTNode* curr = node->parent; 
+    while(curr!=nullptr && node == curr->right){ // use parent pointer to find a left child 
+        node = curr; 
+        curr = curr->parent;
+    }
+    return curr; 
+}
+
+//https://youtu.be/lU99loSvD8s?si=BrdZWzb0SulOxox6
+// move subtrees within the treee
+void RedBlackTree :: transplant(RBTNode* a, RBTNode* b){ // moving the b subtree
+    if(a->parent == nullptr){
+        root= a; 
+    }
+    else if(a = a->parent->left){
+        a->parent->left = b; 
+    }else{
+        a->parent->right = b; 
+    }
+    if(b->parent!= nullptr){ // change b to a 
+        b->parent = a->parent; 
+    }
+
+}
+
+void RedBlackTree:: Remove(int data){
+    bool node = Contains(data); 
+    if(node == false){
+        throw invalid_argument("node does not exist");
+    }
+    
+
+}
+
 string RedBlackTree :: ToInfixString() const{
     return ToInfixString(root);
 }
@@ -318,15 +369,15 @@ string RedBlackTree::ToPostfixString(RBTNode* node) const {
     return left + right + root;
 }
 
-void RedBlackTree::DeleteTree(RBTNode* node) {
+void RedBlackTree::DeleteNode(RBTNode* node) {
     if (node != nullptr) {
-        DeleteTree(node->left); 
-        DeleteTree(node->right); 
+        DeleteNode(node->left); 
+        DeleteNode(node->right); 
         delete node; // Delete the current node
     }
 }
 
 RedBlackTree :: ~RedBlackTree(){ 
-    DeleteTree(root);
+    DeleteNode(root);
 }
 
