@@ -1,6 +1,7 @@
 #include "RedBlackTree.h"
 #include <string>
 #include <stdexcept>
+#include <iostream>
 using namespace std;
 
 RedBlackTree :: RBTNode* RedBlackTree::BSTInsert (int value){ // regular bst insert
@@ -291,7 +292,7 @@ RedBlackTree:: RBTNode* RedBlackTree  ::  InOrdersuccessor(RBTNode* node){
     RBTNode* curr = node->parent; 
     while(curr!=nullptr && node == curr->right){ // use parent pointer to find a left child 
         node = curr; 
-        curr = curr->parent;
+        curr = node->parent;// move up
     }
     return curr; 
 }
@@ -300,27 +301,132 @@ RedBlackTree:: RBTNode* RedBlackTree  ::  InOrdersuccessor(RBTNode* node){
 // move subtrees within the treee
 void RedBlackTree :: transplant(RBTNode* a, RBTNode* b){ // moving the b subtree
     if(a->parent == nullptr){
-        root= a; 
+        root= b; 
     }
-    else if(a = a->parent->left){
+    else if(a == a->parent->left){
         a->parent->left = b; 
     }else{
         a->parent->right = b; 
     }
-    if(b->parent!= nullptr){ // change b to a 
+    if(b!= nullptr){ // change b to a 
         b->parent = a->parent; 
     }
 
 }
+RedBlackTree:: RBTNode* RedBlackTree:: search(int a ){ // searching the tree for node 
+    RBTNode* curr = root; 
+
+    while(curr != nullptr && a != curr->data ){
+        if(curr->data > a){
+            curr = curr->left; 
+        }
+        else{
+            curr = curr->right; 
+        }
+    }
+    return curr; 
+ }
+
 
 void RedBlackTree:: Remove(int data){
-    bool node = Contains(data); 
-    if(node == false){
-        throw invalid_argument("node does not exist");
+    RBTNode* node = search(data); //removed node
+    if (node == nullptr){
+        cout<< "node not found"<< endl; 
+        return; 
     }
-    
+    RBTNode* nodeCopy = node; // point to the orginal node memory 
+    RBTNode* x = nullptr; // pointer to a child of removed node
+    bool nodeOriginalColor = node->color; // keep track of orginal node color
+    //case 1 
+    // no left child
+    if(node->left == nullptr){
+        x = node->right; // x becomes right node 
+        transplant(node,node->right); // removed node replaced with right node because node left node is null
+     //case 2 
+    //no right child 
+    }else if (node->right == nullptr){
+        x = node->left; //x become left node 
+        transplant(node,node->left);  //removed node replaced with left node because node right node is null
+    }else{
+        //case 3 
+        // 2 child case
+        nodeCopy = InOrdersuccessor(node); 
+        nodeOriginalColor = nodeCopy->color; 
+        x = nodeCopy->right; 
+        if(nodeCopy->parent!= node){
+            transplant(nodeCopy,nodeCopy->right); 
+            nodeCopy->right = node->right; 
+            nodeCopy->right->parent = nodeCopy;
 
+        }else{
+            x->parent= nodeCopy; // nodecopy right is null
+        }
+        transplant(node,nodeCopy); 
+        nodeCopy->left = node->left; 
+        nodeCopy->left->parent = nodeCopy; 
+        nodeCopy->color= node->color;
+    }
+    if(nodeOriginalColor == 1 && x != nullptr){
+        deleteFixup(x);
+    }
 }
+
+void RedBlackTree:: deleteFixup(RBTNode* node){
+    while(node != root && node->color == 1  ){
+        if(node == node->parent->left){
+            RBTNode* sibling = node->parent->right;
+            if(sibling->color == 0){
+                sibling->color = 1;
+                node->parent->color = 0;
+                RBTreeRotateLeft(node->parent); 
+                sibling = node->parent->right;
+            }
+            if(sibling->left->color == 1 && sibling->right->color == 1){
+                sibling->color = 0;
+                node= node->parent; 
+            }else{
+                if(sibling->right->color == 1 ){
+                    sibling->left->color = 1; 
+                    node->color = 0;
+                    RBTreeRotateRight(node);
+                    sibling = node->parent->right; 
+                }
+                sibling->color = node->parent->color;
+                node->parent->color = 1; 
+                sibling->right->color = 1;
+                RBTreeRotateLeft(node->parent);
+                node = root; 
+            }
+        }else{
+            RBTNode* sibling = node->parent->left;
+            if(sibling->color == 0){
+                sibling->color = 1; 
+                node->parent->color = 0; 
+                RBTreeRotateRight(node->parent);
+                sibling = node->parent->left; 
+            }
+            if(sibling->right->color == 1 && sibling->left->color == 1){
+                sibling->color = 0;
+                node = node->parent; 
+            }else{
+                if(sibling->left->color == 1 ){
+                    sibling->right->color = 1;
+                    sibling->color = 0;
+                    RBTreeRotateLeft(sibling);
+                    sibling = node->parent->left;
+                }
+                sibling->color = node->parent->color;
+                node->parent->color = 1;
+                sibling->left->color = 1;
+                RBTreeRotateRight(node->parent);
+                node = root;
+            }
+        }
+
+    }
+    node->color = 1;
+}
+
 
 string RedBlackTree :: ToInfixString() const{
     return ToInfixString(root);

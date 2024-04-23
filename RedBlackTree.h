@@ -26,6 +26,8 @@ struct RBTNode{
 
 ~RedBlackTree();
 void Remove(int data);
+RBTNode* search(int a );
+void deleteFixup(RBTNode* node);
 
 RBTNode* InOrdersuccessor(RBTNode* node);
 void transplant(RBTNode* a , RBTNode* b); 
