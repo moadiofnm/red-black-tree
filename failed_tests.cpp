@@ -426,6 +426,63 @@ void TestGetMinimumMaximum() {
   cout << "PASSED!" << endl << endl;
 }
 
+void TestRemoveRootWithTwoChildren() {
+  cout << "Testing Remove Root with Two Children..." << endl;
+  RedBlackTree rbt = RedBlackTree();
+  rbt.Insert(40);
+  rbt.Insert(20);
+  rbt.Insert(60);
+  rbt.Remove(40);
+  cout << "rbt: " << rbt.ToPrefixString() << endl;
+  assert(rbt.ToPrefixString() == " B60  R20 "); 
+
+  cout << "PASSED!" << endl << endl;
+}
+
+void TestRemoveRootWithOneChild() {
+  cout << "Testing Remove Root with One Child..." << endl;
+  RedBlackTree rbt = RedBlackTree();
+  rbt.Insert(40);
+  rbt.Insert(20);
+  rbt.Remove(40);
+  cout << "rbt: " << rbt.ToPrefixString() << endl;
+  assert(rbt.ToPrefixString() == " B20 "); 
+
+  cout << "PASSED!" << endl << endl;
+}
+
+void TestRemoveNodeWithOneChild() {
+  cout << "Testing Remove Node with One Child..." << endl;
+  RedBlackTree rbt = RedBlackTree();
+  rbt.Insert(50);
+  rbt.Insert(30);
+  rbt.Insert(70);
+  rbt.Insert(20);
+  rbt.Insert(40);
+  rbt.Remove(30);
+  cout << "rbt: " << rbt.ToPrefixString() << endl;
+  assert(rbt.ToPrefixString() == " B50  B40  R20  B70 "); 
+
+  cout << "PASSED!" << endl << endl;
+}
+
+void TestRemoveNodeWithTwoChildren() {
+  cout << "Testing Remove Node with Two Children..." << endl;
+  RedBlackTree rbt = RedBlackTree();
+  rbt.Insert(50);
+  rbt.Insert(30);
+  rbt.Insert(70);
+  rbt.Insert(20);
+  rbt.Insert(40);
+  rbt.Insert(60);
+  rbt.Insert(80);
+  rbt.Remove(30);
+  cout << "rbt: " << rbt.ToPrefixString() << endl;
+  assert(rbt.ToPrefixString() == " B50  B40  R20  B70  R60  R80  ");
+
+  cout << "PASSED!" << endl << endl;
+}
+
 int main(){
   TestInsertThirdNode();//works
   TestInsertFifthNode();//works 
@@ -435,5 +492,10 @@ TestInsertWithRecursiveFixUp(); // works
 TestInsertDuplicates();// works
 TestToStrings2(); //works 
 TestToStrings();//works 
-TestInsertRandomTests();
+TestInsertRandomTests();  
+TestRemoveRootWithOneChild();//works
+TestRemoveRootWithTwoChildren();//works
+TestRemoveNodeWithOneChild();// works
+TestRemoveNodeWithTwoChildren();// works
+
 }
