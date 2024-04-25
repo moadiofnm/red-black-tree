@@ -18,7 +18,7 @@ int main(){
 	// create a simulated 3.7 million ID number system.
 	//ologn insert 
 	const int N = 3700000;
-	srand(static_cast<unsigned int>(time(nullptr)));
+	srand(static_cast<unsigned int>(time(nullptr)));// using seed
 
 	clock_t start = clock();
 	RedBlackTree rbt = RedBlackTree();
@@ -54,7 +54,7 @@ int main(){
         rbt.Remove(idToadd);
         clock_t stopadd = clock();
         double durationAdd = static_cast<double>(stopadd - startadd) / CLOCKS_PER_SEC;
-        cout << "Removing ID " << idToadd << " took " << duration<< " seconds." << endl;
+        cout << "Adding ID " << idToadd << " took " << durationAdd<< " seconds." << endl;
     }
 
 
