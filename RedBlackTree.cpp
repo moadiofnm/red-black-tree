@@ -11,10 +11,8 @@ RedBlackTree :: RBTNode* RedBlackTree::BSTInsert (int value){ // regular bst ins
         newNode->parent = nullptr; 
         return newNode;
     }
-    
     RBTNode *curr = root; 
     RBTNode *parent = nullptr;
-
     while(curr != nullptr){
         parent = curr; 
         if(newNode->data < curr->data){
@@ -52,17 +50,10 @@ bool RedBlackTree ::Contains(int value){
     return false; // not found 
 }
 
-
-
-
 int RedBlackTree :: GetMin() {
-
     RBTNode* curr = root; 
-    // RBTNode* next = curr->left;
-
     if(root == nullptr){
         throw runtime_error("tree is empty");
-
     }
     while(curr->left != nullptr){
         curr = curr->left; // keep going left
@@ -71,13 +62,9 @@ int RedBlackTree :: GetMin() {
 }
 
 int RedBlackTree :: GetMax() {
-
     RBTNode* curr = root; 
-    // RBTNode* next = curr->right;
-
     if(root == nullptr){
         throw runtime_error("tree is empty");
-
     }
     while(curr->right != nullptr){
         curr = curr->right; // keep going right 
@@ -98,10 +85,8 @@ bool RedBlackTree:: RBTreeSetChild(RBTNode* parent, string whichChild, RBTNode* 
     }
     if(child != nullptr){
         child->parent = parent;
-
     }
     return true;
-
 }
 
 //https://learn.zybooks.com/zybook/FANDMCPS222NovakSpring2024/chapter/16/section/2?content_resource_id=61871801
@@ -113,7 +98,6 @@ void RedBlackTree ::  RBTreeReplaceChild(RBTNode* parent,RBTNode* currentChild, 
     if(parent->right == currentChild){
         RBTreeSetChild(parent,"right",newChild);
     }
-    // return false;
 }
 
 //16.2.4 zybook
@@ -121,7 +105,6 @@ void RedBlackTree:: RBTreeRotateRight(RBTNode*  node){
     if (node == nullptr || node->left == nullptr) { // if rotation is possible 
         throw logic_error("trying to right rotate there is no left child"); 
     }
-
     RBTNode* leftRightChild = node->left->right;
     if(node->parent != nullptr){// node isnt root
         RBTreeReplaceChild(node->parent,node,node->left);
@@ -133,7 +116,6 @@ void RedBlackTree:: RBTreeRotateRight(RBTNode*  node){
     }
     RBTreeSetChild(node->left,"right",node);
     RBTreeSetChild(node,"left",leftRightChild);
-
 }
 
 ///16.2.3 zybook 
@@ -141,7 +123,6 @@ void RedBlackTree:: RBTreeRotateLeft(RBTNode* node){
     if (node == nullptr || node->right == nullptr) { // if rotation is possible 
         throw  logic_error("trying to left rotate there is no right child"); 
     }
-
     RBTNode* rightLeftChild = node->right->left;
     if(node->parent != nullptr){ // if node isnt a root
         RBTreeReplaceChild(node->parent, node ,node->right);
@@ -199,13 +180,11 @@ void RedBlackTree:: RBTreeBalance(RBTNode* node){
     }
     if(node == parent->right && parent == grandparent->left){
         RBTreeRotateLeft(parent);
-        // node = parent->left;
         node = parent;
         parent = node->parent;
     }
     else if (node == parent->right && parent == grandparent->right){
         RBTreeRotateRight(parent); 
-        // node = parent->right;
         node = parent; 
         parent = node->parent; 
     }
@@ -216,7 +195,6 @@ void RedBlackTree:: RBTreeBalance(RBTNode* node){
     }else{
         RBTreeRotateLeft(grandparent);
     }
-
 }
 
 void RedBlackTree :: Fixup(RBTNode* node){
@@ -240,7 +218,6 @@ void RedBlackTree :: Fixup(RBTNode* node){
                 grandparent->color = 0;// grandparent is red
                 RBTreeRotateRight(grandparent); // rotate grandparent
             }
-
         }else{
             RBTNode* uncle = GetUncleNode(node);
             if(uncle!= nullptr && uncle->color == 0){
@@ -263,15 +240,14 @@ void RedBlackTree :: Fixup(RBTNode* node){
 }
 
 // 16.3.1 zybook
+//o(logn )
 void RedBlackTree :: Insert(int value){ // rbt insert
      if (this->Contains(value)) {
         throw invalid_argument("Value already exists");
     }
     RBTNode* newNode = BSTInsert(value); 
-    // newNode->color = 0; // color is red
     RBTreeBalance(newNode);
 }
-
 
 RedBlackTree:: RBTNode* RedBlackTree  ::  InOrdersuccessor(RBTNode* node){
     if(node == nullptr){// check if node is nullptr
@@ -284,11 +260,9 @@ RedBlackTree:: RBTNode* RedBlackTree  ::  InOrdersuccessor(RBTNode* node){
             curr = curr->left; // then go all the way left 
         }
         return curr;
-    }   
-
+    }  
     //geeksforgeeks.org/inorder-successor--binary-search-tree/#
     // used the part of this code for if the node does not have a right child.
-
     RBTNode* curr = node->parent; 
     while(curr!=nullptr && node == curr->right){ // use parent pointer to find a left child 
         node = curr; 
@@ -299,7 +273,7 @@ RedBlackTree:: RBTNode* RedBlackTree  ::  InOrdersuccessor(RBTNode* node){
 
 //https://youtu.be/lU99loSvD8s?si=BrdZWzb0SulOxox6
 // move subtrees within the treee
-void RedBlackTree :: transplant(RBTNode* a, RBTNode* b){ // moving the b subtree
+void RedBlackTree :: transplant(RBTNode* a, RBTNode* b){ // moving the b subtree to a 
     if(a->parent == nullptr){
         root= b; 
     }
@@ -311,11 +285,9 @@ void RedBlackTree :: transplant(RBTNode* a, RBTNode* b){ // moving the b subtree
     if(b!= nullptr){ // change b to a 
         b->parent = a->parent; 
     }
-
 }
 RedBlackTree:: RBTNode* RedBlackTree:: search(int a ){ // searching the tree for node 
     RBTNode* curr = root; 
-
     while(curr != nullptr && a != curr->data ){
         if(curr->data > a){
             curr = curr->left; 
@@ -327,7 +299,8 @@ RedBlackTree:: RBTNode* RedBlackTree:: search(int a ){ // searching the tree for
     return curr; 
  }
 
-
+//o(logn)
+//https://youtu.be/lU99loSvD8s?si=BrdZWzb0SulOxox6
 void RedBlackTree:: Remove(int data){
     RBTNode* node = search(data); //removed node
     if (node == nullptr){
@@ -350,15 +323,15 @@ void RedBlackTree:: Remove(int data){
     }else{
         //case 3 
         // 2 child case
-        nodeCopy = InOrdersuccessor(node); 
+        nodeCopy = InOrdersuccessor(node); // get inordersuccessor
         nodeOriginalColor = nodeCopy->color; 
         x = nodeCopy->right; 
         if(nodeCopy->parent!= node){
             transplant(nodeCopy,nodeCopy->right); 
             nodeCopy->right = node->right; 
             nodeCopy->right->parent = nodeCopy;
-
-        }else{
+        }
+        if(x!=nullptr){
             x->parent= nodeCopy; // nodecopy right is null
         }
         transplant(node,nodeCopy); 
@@ -369,10 +342,16 @@ void RedBlackTree:: Remove(int data){
     if(nodeOriginalColor == 1 && x != nullptr){
         deleteFixup(x);
     }
+    // DeleteNode(node);
+    delete node;// handling memory
+    node = nullptr; // handling memory
+    
 }
 
+///https://youtu.be/iw8N1_keEWA?si=RWi5W9yC20-tDr1d
+//explained through walkthroug in python Delete fixup. used his code to implement this function
 void RedBlackTree:: deleteFixup(RBTNode* node){
-    while(node != root && node->color == 1  ){
+    while(node != root && node->color == 1 ){
         if(node == node->parent->left){
             RBTNode* sibling = node->parent->right;
             if(sibling->color == 0){
@@ -383,7 +362,7 @@ void RedBlackTree:: deleteFixup(RBTNode* node){
             }
             if(sibling->left->color == 1 && sibling->right->color == 1){
                 sibling->color = 0;
-                node= node->parent; 
+                node = node->parent; 
             }else{
                 if(sibling->right->color == 1 ){
                     sibling->left->color = 1; 
@@ -422,7 +401,6 @@ void RedBlackTree:: deleteFixup(RBTNode* node){
                 node = root;
             }
         }
-
     }
     node->color = 1;
 }
@@ -471,7 +449,6 @@ string RedBlackTree::ToPostfixString(RBTNode* node) const {
     string left = ToPostfixString(node->left);
     string right = ToPostfixString(node->right);
     string root = (node->color == 1 ? " B" : " R") + to_string(node->data) + " ";
-    
     return left + right + root;
 }
 
@@ -480,6 +457,7 @@ void RedBlackTree::DeleteNode(RBTNode* node) {
         DeleteNode(node->left); 
         DeleteNode(node->right); 
         delete node; // Delete the current node
+        node = nullptr; 
     }
 }
 
