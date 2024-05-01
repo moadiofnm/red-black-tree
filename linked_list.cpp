@@ -42,15 +42,18 @@ void LinkedList<T>::push_front(T item){
 	head = n;
 }
 
-// template <typename T>
-// void LinkedList<T>::insert(size_t pos, T item){
-// 	Node<T> *n = new Node<T>;
-// 	n->data = item; 
-// 	get_node(pos); 
-
-
-
-// }
+template <typename T>
+void LinkedList<T>::insert(size_t pos, T item){
+	Node<T> *n = new Node<T>; // new  node 
+	n->data = item; // data of the node  == item 
+	Node<T> insNode = get_node(pos); // find the inserted node 
+	if(insNode == nullptr)
+		return throw std::invalid_argument("Node does not exist");
+	n->prev = insNode.prev; // set pointer to the inserted node 
+	n->next = insNode.next; // set pointer to the inserted node
+	n->next->next = insNode; // set the found ins node to the next node of the inserted node 
+	insNode.prev = n; // set the prev of the found node to the new node 
+}
 
 
 template <typename T>
