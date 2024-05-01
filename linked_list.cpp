@@ -47,12 +47,12 @@ void LinkedList<T>::insert(size_t pos, T item){
 	Node<T> *n = new Node<T>; // new  node 
 	n->data = item; // data of the node  == item 
 	Node<T> insNode = get_node(pos); // find the inserted node 
-	if(insNode == nullptr)
-		return throw std::invalid_argument("Node does not exist");
-	n->prev = insNode.prev; // set pointer to the inserted node 
-	n->next = insNode.next; // set pointer to the inserted node
-	n->next->next = insNode; // set the found ins node to the next node of the inserted node 
-	insNode.prev = n; // set the prev of the found node to the new node 
+	if(insNode != nullptr){
+		n->prev = insNode.prev; // set pointer to the inserted node 
+		n->next = insNode.next; // set pointer to the inserted node
+		n->next->next = insNode; // set the found ins node to the next node of the inserted node 
+		insNode.prev = n; // set the prev of the found node to the new node 
+	}
 }
 
 
@@ -86,17 +86,14 @@ void LinkedList<T>:: deleteNode ( Node<T>* node){
 	if(node != nullptr){
 		deleteNode(node->next);
 		deleteNode(node->prev);
-		delete node;
-		node = nullptr; 
 	}
-
 }
 
 template <typename T>
-
 LinkedList<T>:: ~LinkedList(){
 	deleteNode(Node);
-	
+	delete Node;
+	Node = nullptr; 
 }
 
 
